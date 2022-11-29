@@ -36,7 +36,6 @@ def solve():
                 duplicates = True
             else:
                 dictionary.update({hst: [os.path.join(root, f)]})
-            # print(GetFileSHA1(os.path.join(root, f)))
     if not duplicates:
         print("No duplicates")
     for key, val in dictionary.items():
@@ -44,13 +43,24 @@ def solve():
             print("The following files are identical:")
             for i in range(0, len(val)):
                 print(str(i + 1) + ". " + val[i])
-            kept_file = int(input("Please select the file you want to keep [1.." + str(len(val)) + "]? \n"))
+            kept_file = int(input("Please select the file you want to keep [1.." + str(len(val)) + "]? If you don't "
+                                                                                                   "want to delete "
+                                                                                                   "any file press 0. "
+                                                                                                   "\n"))
+            if kept_file == 0:
+                print("No files deleted.")
+                break
             if 0 < kept_file > len(val):
                 raise Exception("[ERROR] - File selected not is in list!")
             for i in range(0, len(val)):
                 if i == kept_file - 1:
-                    continue
+                    if os.path.exists(val[i]) is False:
+                        raise Exception("[ERROR] - The saved file no longer exists!")
+                    else:
+                        continue
                 else:
+                    if os.path.exists(val[i]) is False:
+                        raise Exception("[ERROR] - File " + val[i] + " cannot be deleted; this does not exist")
                     os.remove(val[i])
 
 
